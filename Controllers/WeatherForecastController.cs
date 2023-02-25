@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 
 namespace HangFireTemplate.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [OpenApiTags("天氣預報")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -19,6 +21,7 @@ namespace HangFireTemplate.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(WeatherForecast), 200)]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
