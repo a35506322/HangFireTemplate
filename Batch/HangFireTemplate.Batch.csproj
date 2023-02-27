@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Entities\" />
     <Folder Include="Services\Dtos\" />
-    <Folder Include="Services\Requests\" />
   </ItemGroup>
 
 </Project>

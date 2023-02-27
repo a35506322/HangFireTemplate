@@ -18,4 +18,5 @@ global using Dapper;
 global using System.Text;
 global using System.Data.SqlClient;
 global using HangFireTemplate.Batch.Services.Responses;
-
+global using HangFireTemplate.Batch.Services.Requests;
+global using System.ComponentModel.DataAnnotations;

@@ -8,13 +8,21 @@ public class EmployeeRepository : IEmployeeRepository
         this._dataBaseHelper = dataBaseHelper;
     }
 
-    public async Task<IEnumerable<EmployeeEntity>> GetEmployees()
+    public async Task<IEnumerable<EmployeeEntity>> GetEmployees(EmployeeEntity? employeeEntity = null)
     {
-        var sql = @"SELECT * FROM [Northwind].[dbo].[Employees]";
+        var sql = @"SELECT * FROM [Northwind].[dbo].[Employees] Where 1=1 ";
 
         using (IDbConnection conn = _dataBaseHelper.CreateLocalHostConnection())
         {
-            var result = await conn.QueryAsync<EmployeeEntity>(sql);
+            if (employeeEntity != null)
+            {
+                if (employeeEntity.EmployeeID > 0)
+                {
+                    sql += @"And EmployeeID = @EmployeeID ";
+                }
+            }
+
+            var result = await conn.QueryAsync<EmployeeEntity>(sql,employeeEntity);
             return result;
         }
     }

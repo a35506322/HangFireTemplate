@@ -6,5 +6,5 @@ public interface IEmployeeRepository
     /// 取得員工們
     /// </summary>
     /// <returns></returns>
-    public Task<IEnumerable<EmployeeEntity>> GetEmployees();
+    public Task<IEnumerable<EmployeeEntity>> GetEmployees(EmployeeEntity? employeeEntity = null );
 }

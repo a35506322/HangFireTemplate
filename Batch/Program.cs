@@ -2,8 +2,8 @@ Log.Logger = new LoggerConfiguration()
    .MinimumLevel.Information()
    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
    .Enrich.FromLogContext()
-   .WriteTo.Console(new RenderedCompactJsonFormatter())
-   .WriteTo.File(new RenderedCompactJsonFormatter(), "../Logs/Batch-.txt", rollingInterval: RollingInterval.Hour)
+   .WriteTo.Console()
+   .WriteTo.File("../Logs/Batch-.txt", rollingInterval: RollingInterval.Day)
    .CreateBootstrapLogger();
 
 try
@@ -16,9 +16,12 @@ try
 
     // µù¥U SerilLog
     builder.Host.UseSerilog((context, services, configuration) => configuration
+      .MinimumLevel.Information()
+      .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
      .ReadFrom.Configuration(context.Configuration)
      .ReadFrom.Services(services)
      .Enrich.FromLogContext()
+     .WriteTo.File("../Logs/Batch-.txt", rollingInterval: RollingInterval.Day)
      .WriteTo.Console());
 
     // Add services to the container.
