@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Formatters;
 
-namespace HangFireTemplate.Batch.Services.Requests;
+namespace HangFireTemplate.Batch.Services.Requests.Post;
 
-public class InsertOnWorkTimeRequest/*:IValidatableObject*/
+public class PostOnWorkTimeRequest/*:IValidatableObject*/
 {
     [DisplayName("員工編號")]
-    [Required(ErrorMessage ="{0} 為必輸")]
+    [Required(ErrorMessage = "{0} 為必輸")]
     public int EmployeeID { get; set; }
     //[DisplayName("工作日")]
     //[Required(ErrorMessage = "{0} 為必輸")]

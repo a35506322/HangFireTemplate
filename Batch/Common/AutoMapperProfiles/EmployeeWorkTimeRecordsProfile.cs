@@ -4,6 +4,8 @@ public class EmployeeWorkTimeRecordsProfile : Profile
 {
     public EmployeeWorkTimeRecordsProfile()
     {
-        CreateMap<InsertOnWorkTimeRequest, EmployeeWorkTimeRecordsEntity>();
+        CreateMap<PostOnWorkTimeRequest, EmployeeWorkTimeRecordsEntity>();
+        CreateMap<GetWorkTimeRecordRequest, EmployeeWorkTimeRecordsEntity>();
+        CreateMap<EmployeeWorkTimeRecordsEntity, GetWorkTimeRecordResponse>();
     }
 }

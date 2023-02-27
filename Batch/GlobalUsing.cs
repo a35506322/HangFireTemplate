@@ -20,3 +20,5 @@ global using System.Data.SqlClient;
 global using HangFireTemplate.Batch.Services.Responses;
 global using HangFireTemplate.Batch.Services.Requests;
 global using System.ComponentModel.DataAnnotations;
+global using HangFireTemplate.Batch.Services.Requests.Get;
+global using HangFireTemplate.Batch.Services.Requests.Post;

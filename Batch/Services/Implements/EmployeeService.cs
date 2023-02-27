@@ -1,5 +1,6 @@
 ﻿using HangFireTemplate.Batch.Repositories.Entities;
-using HangFireTemplate.Batch.Services.Requests;
+using HangFireTemplate.Batch.Services.Requests.Get;
+using HangFireTemplate.Batch.Services.Requests.Post;
 
 namespace HangFireTemplate.Batch.Services.Implements;
 
@@ -23,7 +24,14 @@ public class EmployeeService : IEmployeeService
        return new ResultResponse() { Data = employeeResponse };
     }
 
-    public async Task<ResultResponse> InsertOnWorkTime(InsertOnWorkTimeRequest insertOnWorkTimeRequest)
+    public async Task<ResultResponse> GetWorkTimeRecord(GetWorkTimeRecordRequest getWorkTimeRecordRequest)
+    {
+        var employeeWorkTimeRecordsEntity = this._mapper.Map<EmployeeWorkTimeRecordsEntity>(getWorkTimeRecordRequest);
+        var records = await this._employeeWorkTimeRecordRepository.GetEmployeeWorkTimeRecords(employeeWorkTimeRecordsEntity);
+        return new ResultResponse() { Data = records };
+    }
+
+    public async Task<ResultResponse> InsertOnWorkTime(PostOnWorkTimeRequest insertOnWorkTimeRequest)
     {
         var employeeWorkTimeRecordsEntity = this._mapper.Map<EmployeeWorkTimeRecordsEntity>(insertOnWorkTimeRequest);
 

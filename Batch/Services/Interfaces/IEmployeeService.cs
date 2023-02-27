@@ -1,4 +1,5 @@
-﻿using HangFireTemplate.Batch.Services.Requests;
+﻿using HangFireTemplate.Batch.Services.Requests.Get;
+using HangFireTemplate.Batch.Services.Requests.Post;
 
 namespace HangFireTemplate.Batch.Services.Interfaces
 {
@@ -14,7 +15,13 @@ namespace HangFireTemplate.Batch.Services.Interfaces
         /// </summary>
         /// <param name="insertOnWorkTimeRequest"></param>
         /// <returns></returns>
-        public Task<ResultResponse> InsertOnWorkTime(InsertOnWorkTimeRequest insertOnWorkTimeRequest);
+        public Task<ResultResponse> InsertOnWorkTime(PostOnWorkTimeRequest insertOnWorkTimeRequest);
+        /// <summary>
+        /// 查詢打卡時間
+        /// </summary>
+        /// <param name="getWorkTimeRecordRequest"></param>
+        /// <returns></returns>
+        public Task<ResultResponse> GetWorkTimeRecord(GetWorkTimeRecordRequest getWorkTimeRecordRequest);
 
     }
 }

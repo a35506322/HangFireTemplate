@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Dtos\" />
+    <Folder Include="Services\Requests\Delete\" />
   </ItemGroup>
 
 </Project>
