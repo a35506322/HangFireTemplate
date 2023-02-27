@@ -9,8 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
+    <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Entities\" />
+    <Folder Include="Services\Dtos\" />
+    <Folder Include="Services\Requests\" />
   </ItemGroup>
 
 </Project>

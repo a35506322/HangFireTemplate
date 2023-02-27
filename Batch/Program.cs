@@ -28,6 +28,32 @@ try
 
     builder.Services.AddControllers();
 
+    // AutoMapper
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    // DI
+    builder.Services.AddSingleton<DataBaseHelper>();
+
+    // 將Service結尾且生命週期相同的物件,統一註冊
+    builder.Services
+        .Scan(scan => scan
+        .FromAssemblyOf<Program>() // 1.遍歷Program類別所在程序集中的所有類別
+        .AddClasses(classes =>  // 2.要自動註冊的類別,條件為Service結尾的類別
+            classes.Where(t => t.Name.EndsWith("Service", StringComparison.OrdinalIgnoreCase)))
+        .AsImplementedInterfaces() // 3.註冊的類別有實作界面
+        .WithScopedLifetime() // 4.生命週期設定為Scoped
+    );
+
+    // 將Repository結尾且生命週期相同的物件,統一註冊
+    builder.Services
+        .Scan(scan => scan
+        .FromAssemblyOf<Program>() // 1.遍歷Program類別所在程序集中的所有類別
+        .AddClasses(classes =>  // 2.要自動註冊的類別,條件為Repository結尾的類別
+            classes.Where(t => t.Name.EndsWith("Repository", StringComparison.OrdinalIgnoreCase)))
+        .AsImplementedInterfaces() // 3.註冊的類別有實作界面
+        .WithScopedLifetime() // 4.生命週期設定為Scoped
+    );
+
     var app = builder.Build();
 
     // 套用Nswag文件

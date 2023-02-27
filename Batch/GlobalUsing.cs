@@ -5,3 +5,17 @@ global using Serilog;
 global using Serilog.Formatting.Compact;
 global using Microsoft.AspNetCore.Mvc;
 global using NSwag.Annotations;
+global using AutoMapper;
+global using System.ComponentModel;
+global using HangFireTemplate.Batch.Enums;
+global using HangFireTemplate.Batch.Responses;
+global using HangFireTemplate.Batch.Repositories.Entities;
+global using HangFireTemplate.Batch.Repositories.Interfaces;
+global using HangFireTemplate.Batch.Repositories.Helpers;
+global using System.Data;
+global using HangFireTemplate.Batch.Services.Interfaces;
+global using Dapper;
+global using System.Text;
+global using System.Data.SqlClient;
+global using HangFireTemplate.Batch.Services.Responses;
+
