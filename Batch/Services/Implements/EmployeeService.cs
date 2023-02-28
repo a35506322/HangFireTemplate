@@ -1,8 +1,4 @@
-﻿using HangFireTemplate.Batch.Repositories.Entities;
-using HangFireTemplate.Batch.Services.Requests.Get;
-using HangFireTemplate.Batch.Services.Requests.Post;
-
-namespace HangFireTemplate.Batch.Services.Implements;
+﻿namespace HangFireTemplate.Batch.Services.Implements;
 
 public class EmployeeService : IEmployeeService
 {
@@ -17,6 +13,54 @@ public class EmployeeService : IEmployeeService
         this._employeeWorkTimeRecordRepository = employeeWorkTimeRecordRepository;
         this._mapper = mapper;
     }
+    /// <summary>
+    /// 通知未打卡人員排程
+    ///  [DisplayName("排程作業: {0} - {1}")] 應用在HangFire 頁面顯示
+    ///  [AutomaticRetry(Attempts = 0)] 失敗不排進駐列
+    /// </summary>
+    /// <param name="creattor"></param>
+    /// <param name="jobName"></param>
+    /// <param name="getNotifyUncheckedEmployeesRequest"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    [DisplayName("排程作業: {0} - {1}")]
+    [AutomaticRetry(Attempts = 0)]
+    public async Task BatchNotifyUncheckedEmployees(string creattor , string jobName,GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest, PerformContext context)
+    {
+        EmployeeWorkTimeRecordsEntity employeeWorkTimeRecordsEntity = new EmployeeWorkTimeRecordsEntity()
+        {
+            WorkDay = getNotifyUncheckedEmployeesRequest.WorkDay
+        };
+
+        // 全體員工
+        var employeesEntities = await _employeeRepositroy.GetEmployees();
+
+        // 某天有打卡人員
+        var records = await this._employeeWorkTimeRecordRepository.GetEmployeeWorkTimeRecords(employeeWorkTimeRecordsEntity);
+
+        var allEmployees = employeesEntities.Select(x => x.EmployeeID);
+
+        var checkedEemployees = records.Select(x => x.EmployeeID);
+
+        var exceptEemployees = allEmployees.Except(checkedEemployees);
+
+        // 排程 Console
+        if (exceptEemployees.Count() > 0)
+        {
+            // context.WriteLine 會在HangFire Processing顯示
+            context.WriteLine($"{getNotifyUncheckedEmployeesRequest.WorkDay} 未打卡人員有：");
+            foreach (var employee in exceptEemployees)
+            {
+                context.WriteLine(employee);
+            }
+        }
+        else 
+        {
+            context.WriteLine($"{getNotifyUncheckedEmployeesRequest.WorkDay} 皆以打卡");
+        }
+        
+    }
+
     public async Task<ResultResponse> GetEmployees()
     {
        var employeeEntities = await _employeeRepositroy.GetEmployees();

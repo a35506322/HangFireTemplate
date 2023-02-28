@@ -57,6 +57,27 @@ try
         .WithScopedLifetime() // 4.生命週期設定為Scoped
     );
 
+    // Add Hangfire services.
+    builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseConsole()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFire"), new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true,
+        }));
+
+    // Add the processing server as IHostedService
+    builder.Services.AddHangfireServer();
+
+    // 使用擴充方法註冊排程工作元件
+    builder.AddSchTaskWorker();
+
     var app = builder.Build();
 
     // 套用Nswag文件
@@ -86,7 +107,13 @@ try
     // 每一個 Request 使用 Serilog 記錄下來 
     app.UseSerilogRequestLogging();
 
+    app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseHangfireDashboard();
+
+    // 使用擴充方法設定排程工作
+    app.SetSchTasks();
 
     app.MapControllers();
 

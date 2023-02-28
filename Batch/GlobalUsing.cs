@@ -22,3 +22,13 @@ global using HangFireTemplate.Batch.Services.Requests;
 global using System.ComponentModel.DataAnnotations;
 global using HangFireTemplate.Batch.Services.Requests.Get;
 global using HangFireTemplate.Batch.Services.Requests.Post;
+global using Hangfire;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using System.Linq.Expressions;
+global using Hangfire.Server;
+global using Hangfire.SqlServer;
+global using Microsoft.Extensions.Configuration;
+global using Hangfire.Dashboard;
+global using Hangfire.Console;
+global using HangFireTemplate.Batch;
+

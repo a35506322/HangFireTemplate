@@ -7,5 +7,7 @@ public class EmployeeWorkTimeRecordsProfile : Profile
         CreateMap<PostOnWorkTimeRequest, EmployeeWorkTimeRecordsEntity>();
         CreateMap<GetWorkTimeRecordRequest, EmployeeWorkTimeRecordsEntity>();
         CreateMap<EmployeeWorkTimeRecordsEntity, GetWorkTimeRecordResponse>();
+        CreateMap<GetNotifyUncheckedEmployeesRequest, GetWorkTimeRecordResponse>();
+        
     }
 }
