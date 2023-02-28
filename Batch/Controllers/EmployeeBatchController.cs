@@ -12,8 +12,7 @@ public class EmployeeBatchController : ControllerBase
     /// <summary>
     /// 通知位打卡人員打卡
     /// </summary>
-    /// <response code="200">code:2000 成功
-    /// code:4000 查無此員工、已重複打卡，請確認</response>
+    /// <response code="200"></response>
     /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(200)]
@@ -25,6 +24,19 @@ public class EmployeeBatchController : ControllerBase
          2.  BackgroundJob.Enqueue 是 async await 非同步執行
          */
         BackgroundJob.Enqueue(() => this._employeeService.BatchNotifyUncheckedEmployees($"管理者", "通知未打卡人員打卡", getNotifyUncheckedEmployeesRequest, null));
+        return Ok(); ;
+    }
+    /// <summary>
+    /// 通知位打卡人員打卡(錯誤版)
+    /// </summary>
+    /// <response code="200"></response>
+    /// <returns></returns>
+    [HttpGet]
+    [ProducesResponseType(200)]
+    [OpenApiTags("排程相關")]
+    public IActionResult NotifyUncheckedEmployeesErr([FromQuery] GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest)
+    {
+        BackgroundJob.Enqueue(() => this._employeeService.BatchNotifyUncheckedEmployeesErr($"管理者", "通知未打卡人員打卡(錯誤)", getNotifyUncheckedEmployeesRequest, null));
         return Ok(); ;
     }
 }

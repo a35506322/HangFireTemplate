@@ -28,5 +28,14 @@ public interface IEmployeeService
     /// <param name="context">HangFire 中的 Console</param>
     /// <returns></returns>
     public Task BatchNotifyUncheckedEmployees(string creattor, string jobName,GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest, PerformContext context);
+    /// <summary>
+    /// [排程]通知未打卡人員打卡(錯誤)
+    /// </summary>
+    /// <param name="creattor">{userId} 建立於 {DateTime.Now:MM-dd HH:mm:ss}</param>
+    /// <param name="jobName">排程名稱</param>
+    /// <param name="getNotifyUncheckedEmployeesRequest"></param>
+    /// <param name="context">HangFire 中的 Console</param>
+    /// <returns></returns>
+    public Task BatchNotifyUncheckedEmployeesErr(string creattor, string jobName, GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest, PerformContext context);
 
 }

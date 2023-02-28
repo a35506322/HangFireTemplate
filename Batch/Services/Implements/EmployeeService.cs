@@ -60,6 +60,56 @@ public class EmployeeService : IEmployeeService
         }
         
     }
+    /// <summary>
+    /// 通知未打卡人員排程(錯誤)
+    ///  [DisplayName("排程作業: {0} - {1}")] 應用在HangFire 頁面顯示
+    ///  [AutomaticRetry(Attempts = 0)] 失敗不排進駐列
+    /// </summary>
+    /// <param name="creattor"></param>
+    /// <param name="jobName"></param>
+    /// <param name="getNotifyUncheckedEmployeesRequest"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    [DisplayName("排程作業: {0} - {1}")]
+    [AutomaticRetry(Attempts = 0)]
+    public async Task BatchNotifyUncheckedEmployeesErr(string creattor, string jobName, GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest, PerformContext context)
+    {
+        EmployeeWorkTimeRecordsEntity employeeWorkTimeRecordsEntity = new EmployeeWorkTimeRecordsEntity()
+        {
+            WorkDay = getNotifyUncheckedEmployeesRequest.WorkDay
+        };
+
+        context.WriteLine("查詢員工");
+
+        // 全體員工
+        var employeesEntities = await _employeeRepositroy.GetEmployees();
+
+        context.WriteLine($"查詢 {getNotifyUncheckedEmployeesRequest.WorkDay} 人員");
+
+        // 某天有打卡人員
+        var records = await this._employeeWorkTimeRecordRepository.GetEmployeeWorkTimeRecordsErr(employeeWorkTimeRecordsEntity);
+
+        var allEmployees = employeesEntities.Select(x => x.EmployeeID);
+
+        var checkedEemployees = records.Select(x => x.EmployeeID);
+
+        var exceptEemployees = allEmployees.Except(checkedEemployees);
+
+        // 排程 Console
+        if (exceptEemployees.Count() > 0)
+        {
+            // context.WriteLine 會在HangFire Processing顯示
+            context.WriteLine($"{getNotifyUncheckedEmployeesRequest.WorkDay} 未打卡人員有：");
+            foreach (var employee in exceptEemployees)
+            {
+                context.WriteLine(employee);
+            }
+        }
+        else
+        {
+            context.WriteLine($"{getNotifyUncheckedEmployeesRequest.WorkDay} 皆以打卡");
+        }
+    }
 
     public async Task<ResultResponse> GetEmployees()
     {
