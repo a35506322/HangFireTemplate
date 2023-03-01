@@ -31,4 +31,6 @@ global using Microsoft.Extensions.Configuration;
 global using Hangfire.Dashboard;
 global using Hangfire.Console;
 global using HangFireTemplate.Batch;
-
+global using HangFireTemplate.Batch.Repositories.CustomerEntities;
+global using Newtonsoft.Json;
+global using Microsoft.AspNetCore.Mvc.Formatters;

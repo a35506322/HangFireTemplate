@@ -1,7 +1,4 @@
-﻿using Hangfire.Console;
-using HangFireTemplate.Batch.Services.Requests.Get;
-
-namespace HangFireTemplate.Batch;
+﻿namespace HangFireTemplate.Batch;
 
 public class SchTaskWorker
 {
@@ -17,10 +14,11 @@ public class SchTaskWorker
     }
     // 設定定期排程工作
     public void SetSchTasks()
-    {
-        
+    {      
         //利用 appSetting設定循環時間 _configuration["BatchCofig:Corn:NotifyUncheckedEmployees"]         
         SetSchTask("排程作業: Batch - 通知未打卡人員打卡", () => NotifyUncheckedEmployees("Batch", "通知未打卡人員打卡",null), _configuration["BatchCofig:Corn:NotifyUncheckedEmployees"]);
+
+        SetSchTask("排程作業: Batch - 發送排程錯誤訊息", () => BatchSentFailHangFireDetail("Batch", "發送排程錯誤訊息", null), _configuration["BatchCofig:Corn:BatchSentFailHangFireDetail"]);
     }
 
     // 先刪再設，避免錯過時間排程在伺服器啟動時執行
@@ -49,6 +47,25 @@ public class SchTaskWorker
                 GetNotifyUncheckedEmployeesRequest getNotifyUncheckedEmployeesRequest = new GetNotifyUncheckedEmployeesRequest();
                 getNotifyUncheckedEmployeesRequest.WorkDay = DateTime.Now.ToString("yyyy/MM/dd");
                 await employeeService.BatchNotifyUncheckedEmployees(creattor, jobName, getNotifyUncheckedEmployeesRequest, context);
+            }
+        });
+    }
+
+    [DisplayName("排程作業: {0} - {1}")]
+    [AutomaticRetry(Attempts = 0)]
+    public async Task BatchSentFailHangFireDetail(string creattor, string jobName, PerformContext context)
+    {
+        await Task.Run(async () =>
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var hangFireService = scope.ServiceProvider.GetRequiredService<IHangFireService>();
+                GetHangFireJobAndStateRequest request = new GetHangFireJobAndStateRequest();
+                request.StateName = "Failed";
+                request.Name = "Failed";
+                request.EndCreatedAt = DateTime.Now;
+                request.StartCreatedAt = DateTime.Now.AddMonths(-10);
+                await hangFireService.BatchSentFailHangFireDetail(creattor, jobName, request, context);
             }
         });
     }
